@@ -7,19 +7,19 @@ def display_board(board):
     print(board[6] + ' | ' + board[7] + ' | ' + board[8])
 
 #TAKE PLAYER INPUT
-def player_marker():
+def player_marker(name):
     value = 'dummy'
     acceptable_value = ['X','O']
 
     while value not in acceptable_value:
-        value = input('Player 1: Do you want to be X or O? : ').upper()
+        value = input('{} do you want to be X or O? : '.format(name)).upper()
 
         if value not in acceptable_value:
             print('Please select either X or O')
         else:
             return value
 
-#ASK FOR INDEX POSITION TO PUT MARK ON
+
 def get_position():
     index = 'dummy'
     acceptable_value = [x for x in range(1,10)]
@@ -34,19 +34,13 @@ def get_position():
         else:
             return int(index)
 
-#op = get_position()
-#print(op)
 
-#UPDATE THE BOARD AS PER USER INPUT
 def player_turn(board, position, player):
     board[position-1] = player
     return board
 
 #my_list = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
-#my_list = player_turn(my_list, 1, 'X')
-#display_board(my_list)
 
-#CHECK IF ANYONE IS WINER OR NOT
 def winner(board):
     winner_player = 'dummy'
     acceptable_value = ['X','O']
@@ -71,8 +65,52 @@ def winner(board):
     if winner_player in acceptable_value:
         return winner_player
     else:
-        return False
+        return 'dummy'
 
-#my_list = ['X','O','X','O','O','O','O','X','O']
-#op = winner(my_list)
-#print(op)
+my_list = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
+
+player1 = input('Enter player 1 name : ')
+player2 = input('Enter player 2 name : ')
+
+player1_marker = player_marker(player1)
+
+if(player1_marker == 'X'):
+    print('{} your marker is \'O\''.format(player2))
+    player2_marker = 'O'
+else:
+    print('{} your marker is \'X\''.format(player2))
+    player2_marker = 'X'
+
+start = input('Let\'s get started\n press any key and then enter to start')
+if start:
+    print('\n'*100)
+
+display_board(my_list)
+accepted_winners = [player1_marker,player2_marker]
+win = 'dummy'
+count = 1
+
+while win not in accepted_winners:
+    index = get_position()
+    if count%2 == 0:
+        my_list = player_turn(my_list,index,player2_marker)
+    else:
+        my_list = player_turn(my_list,index,player1_marker)
+
+    print('\n' * 100)
+    display_board(my_list)
+    win = winner(my_list)
+    print(win)
+    if count < 9 and win in accepted_winners:
+        if win == player1_marker:
+            print('Congratulations {} you won!!'.format(player1.upper()))
+            exit(0)
+        else:
+            print('Congratulations {} you won!!'.format(player2.upper()))
+            exit(0)
+    elif count == 9 and win not in accepted_winners:
+        print('It\'s a draw!!')
+        exit(0)
+    else:
+        count+=1
+
